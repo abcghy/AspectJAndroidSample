@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         Glide.with(this)
             .load(OSSUtil.addScale(picUrl, 200, 200))
+//            .load(picUrl)
             .into(iv)
     }
 

@@ -1,5 +1,8 @@
 package com.example.myapplication
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.ContextWrapper
 import android.graphics.drawable.Drawable
 import android.util.Log
 import com.bumptech.glide.request.SingleRequest
@@ -28,6 +31,8 @@ class GlideAspect {
 
         if (imageViewTarget is ImageViewTarget<*>) {
             val request = imageViewTarget.request
+            val view = imageViewTarget.view
+
             // 通过 request 获取到请求的图片 URL
             if (request is SingleRequest<*>) {
                 // region 通过反射获取原始请求数据
@@ -44,11 +49,21 @@ class GlideAspect {
                             requestWidth = sizeArray[0]
                             requestHeight = sizeArray[1]
                         }
+                    } else {
+                        // warning no resize on image
+                        val context = view.context
+                        if (context is Activity) {
+                            AlertDialog.Builder(context)
+                                    // You can put more info in the dialog
+                                .setMessage("No size attach to picUrl, please add it before release")
+                                .show()
+                        } else {
+                            // you can add log in here
+                        }
                     }
                 }
             }
 
-            val view = imageViewTarget.view
             viewWidth = view.measuredWidth
             viewHeight = view.measuredHeight
 
